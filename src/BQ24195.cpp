@@ -58,17 +58,32 @@ PMICClass::PMICClass(TwoWire  & wire) :
  * Input          : NONE
  * Return         : 0 on Error, 1 on Success
  *******************************************************************************/
+bool PMICClass::begin(int irqPin, int hostPin)
+{
+    _irqPin = irqPin;
+    _hostPin = hostPin;
+
+    return begin();
+}
+
 bool PMICClass::begin()
 {
+#ifdef USE_USE_ARDUINO_MKR_PIN_LAYOUT
+    _hostPin = PIN_USB_HOST_ENABLE
+#endif
+
+#if defined(ARDUINO_SAMD_MKRGSM1400) || defined(ARDUINO_SAMD_MKRNB1500)
+    _irqPin = PMIC_IRQ_PIN;
+#endif
     _wire->begin();
 
-#ifdef ARDUINO_ARCH_SAMD
-    pinMode(PIN_USB_HOST_ENABLE, OUTPUT);
-    digitalWrite(PIN_USB_HOST_ENABLE, LOW);
-    #if defined(ARDUINO_SAMD_MKRGSM1400) || defined(ARDUINO_SAMD_MKRNB1500)
-      pinMode(PMIC_IRQ_PIN, INPUT_PULLUP);
-    #endif
-#endif
+    if(_hostPin != -1) {
+        pinMode(_hostPin, OUTPUT);
+        digitalWrite(_hostPin, LOW);
+    }
+    if(_irqPin != -1) {
+        pinMode(_irqPin, INPUT_PULLUP);
+    }
 
     //check PMIC version
     if (readRegister(PMIC_VERSION_REGISTER) != 0x23) {
@@ -86,12 +101,14 @@ bool PMICClass::begin()
  *******************************************************************************/
 void PMICClass::end()
 {
-#ifdef ARDUINO_ARCH_SAMD
-    pinMode(PIN_USB_HOST_ENABLE, INPUT);
-    #if defined(ARDUINO_SAMD_MKRGSM1400) || defined(ARDUINO_SAMD_MKRNB1500)
-      pinMode(PMIC_IRQ_PIN, INPUT);
-    #endif
-#endif
+    if(_hostPin != -1) {
+        pinMode(_hostPin, INPUT);
+    }
+
+    if(_irqPin != -1) {
+        pinMode(_irqPin, INPUT);
+    }
+
     _wire->end();
 }
 
@@ -102,9 +119,9 @@ void PMICClass::end()
  * Return         : 0 on Error, 1 on Success
  *******************************************************************************/
 bool PMICClass::enableCharge() {
-#ifdef ARDUINO_ARCH_SAMD
-    digitalWrite(PIN_USB_HOST_ENABLE, LOW);
-#endif
+    if(_hostPin != -1) {
+        digitalWrite(_hostPin, LOW);
+    }
     int DATA = readRegister(POWERON_CONFIG_REGISTER);
 
     if (DATA == -1) {
@@ -158,9 +175,11 @@ bool PMICClass::enableBoostMode() {
     if (!writeRegister(POWERON_CONFIG_REGISTER, mask | 0x20)) {
         return 0;
     }
-#ifdef ARDUINO_ARCH_SAMD
-    digitalWrite(PIN_USB_HOST_ENABLE, HIGH);
-#endif
+
+    if(_hostPin != -1) {
+        digitalWrite(_hostPin, HIGH);
+    }
+
     // Disable Charge Termination Pin
     DATA = readRegister(CHARGE_TIMER_CONTROL_REGISTER);
 

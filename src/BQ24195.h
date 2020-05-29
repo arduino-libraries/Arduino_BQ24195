@@ -50,6 +50,7 @@ class PMICClass {
 
   public:
     PMICClass(TwoWire  & wire);
+    bool begin(int irqPin, int hostPin);
     bool begin();
     void end();
     bool enableCharge();
@@ -135,6 +136,8 @@ class PMICClass {
 
   private:
     TwoWire* _wire;
+    int _hostPin = -1, _irqPin = -1;
+
     int readRegister(byte asddress);
     int writeRegister(byte address, byte val);
 };

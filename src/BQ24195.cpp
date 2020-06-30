@@ -159,7 +159,7 @@ bool PMICClass::enableBoostMode() {
         return 0;
     }
 #ifdef ARDUINO_ARCH_SAMD
-    digitalWrite(PIN_USB_HOST_ENABLE, HIGH);
+    digitalWrite(PIN_USB_HOST_ENABLE, LOW);
 #endif
     // Disable Charge Termination Pin
     DATA = readRegister(CHARGE_TIMER_CONTROL_REGISTER);

@@ -225,6 +225,27 @@ bool PMICClass::disableCharge() {
     return writeRegister(MISC_CONTROL_REGISTER, mask);
 }
 
+
+/*******************************************************************************
+ * Function Name  : disableBoostMode
+ * Description    : Disable the boost mode
+ * Input          : NONE
+ * Return         : 0 on Error, 1 on Success
+*******************************************************************************/
+bool PMICClass::disableBoostMode() {
+  int DATA = readRegister(POWERON_CONFIG_REGISTER);
+#ifdef ARDUINO_ARCH_SAMD
+    digitalWrite(PIN_USB_HOST_ENABLE, HIGH);
+#endif
+
+  if (DATA == -1) {
+    return 0;
+  }
+  byte mask = DATA & 0xCF;
+
+  // set default Charger Configuration value
+  return writeRegister(POWERON_CONFIG_REGISTER, mask | 0x10);
+}
 /*******************************************************************************
  * Function Name  : setInputVoltageLimit
  * Description    : Set the lower input voltage limit, the PMIC set a base

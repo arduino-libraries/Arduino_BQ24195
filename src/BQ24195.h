@@ -55,6 +55,7 @@ class PMICClass {
     bool enableCharge();
     bool enableBoostMode();
     bool disableCharge();
+    bool disableBoostMode();
 
     // Input source control register
     bool enableBuck(void);

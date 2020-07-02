@@ -181,7 +181,12 @@ bool PMICClass::enableBoostMode() {
 
     mask = DATA & 0xFC;
 
-    return writeRegister(MISC_CONTROL_REGISTER,mask | 0x03);
+    if (!writeRegister(MISC_CONTROL_REGISTER,mask | 0x03)) {
+        return 0;
+    }
+    // wait for enable boost mode
+    delay(500);
+    return 1;
 }
 
 /*******************************************************************************

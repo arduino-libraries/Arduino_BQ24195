@@ -41,7 +41,7 @@
 #define CHARGE_TERMINATION_DONE 0x30
 
 // Voltage BUS status
-#define UNKNOWM_MODE 0x00
+#define UNKNOWN_MODE 0x00
 #define USB_HOST_MODE 0x40
 #define ADAPTER_PORT_MODE 0x80
 #define BOOST_MODE 0xC0

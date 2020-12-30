@@ -22,6 +22,10 @@
 //Default PMIC (BQ24195) I2C address
 #define PMIC_ADDRESS                        0x6B
 
+#ifndef round
+#define round(x)     ((x)>=0?(long)((x)+0.5):(long)((x)-0.5))
+#endif
+
 // Register address definitions
 #define INPUT_SOURCE_REGISTER               0x00
 #define POWERON_CONFIG_REGISTER             0x01

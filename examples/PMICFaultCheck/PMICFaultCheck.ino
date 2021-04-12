@@ -1,5 +1,5 @@
 /*
-  PMIC fault Check Example
+  PMIC Fault Check Example
 
   This example shows how to check the PMIC fault states
 
@@ -37,7 +37,7 @@ void loop() {
       break;
     case THERMAL_SHUTDOWN: Serial.println("Thermal shutdown occurred");
       break;
-    case CHARGE_SAFETY_TIME_EXPIRED: Serial.println("Charge safetly timer expired");
+    case CHARGE_SAFETY_TIME_EXPIRED: Serial.println("Charge safety timer expired");
       break;
     case NO_CHARGE_FAULT: Serial.println("No Charge fault");
       break;

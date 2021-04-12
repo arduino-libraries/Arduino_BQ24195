@@ -1,5 +1,5 @@
 /*
-  PMIC Boost mode Example
+  PMIC Boost Mode Example
 
   This example shows how to enable boost mode on Arduino MKR boards
 
@@ -20,15 +20,15 @@ int usb_mode = UNKNOWM_MODE;
 void setup()
 {
   // Serial1 shall be used to print messages because the programming
-  // Port is busy by the guest device
+  // port is busy with the guest device
   Serial1.begin(9600);
   if (!PMIC.begin()) {
     Serial1.println("Failed to initialize PMIC!");
     while (1);
   }
 
-  // Enable boost mode, this mode allow to use the board as host and
-  // connect guest device like keyboard
+  // Enable boost mode, this mode allows using the board as host to
+  // connect a guest device such as a keyboard
   if (!PMIC.enableBoostMode()) {
     Serial1.println("Error enabling Boost Mode");
   }
@@ -40,7 +40,7 @@ void loop() {
   if (actual_mode != usb_mode) {
     usb_mode = actual_mode;
     if (actual_mode == BOOST_MODE) {
-      // if the boost mode was correctly enabled 5V should appear on 5V pin
+      // if the boost mode was correctly enabled, 5 V should appear on 5V pin
       // and on the USB connector
       Serial1.println("Boost mode status enabled");
     }

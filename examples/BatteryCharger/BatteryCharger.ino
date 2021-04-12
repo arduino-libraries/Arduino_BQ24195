@@ -1,11 +1,11 @@
 /*
-  Battery charge Example
+  Battery Charge Example
 
   This example shows how to configure and enable charge mode on Arduino MKR boards
 
   Circuit:
   - Arduino MKR board
-  - 750 mAh lipo battery
+  - 750 mAh LiPo battery
 
   created 21 Aug 2019
   by Riccardo Rizzo
@@ -46,8 +46,8 @@ void setup() {
   }
 
   // Set the charge current to 375 mA
-  // the charge current should be definde as maximum at (C for hour)/2h
-  // to avoid battery explosion (for example for a 750mAh battery set to 0.375 A)
+  // the charge current should be defined as maximum at (C for hour)/2h
+  // to avoid battery explosion (for example for a 750 mAh battery set to 0.375 A)
   if (!PMIC.setChargeCurrent(0.375)) {
     Serial.println("Error in set charge current");
   }

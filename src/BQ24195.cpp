@@ -1,5 +1,5 @@
 /*
-  This file is part of the Arduino_PMIC library.
+  This file is part of the Arduino_BQ24195 library.
   Copyright (c) 2019 Arduino SA. All rights reserved.
 
   This library is free software; you can redistribute it and/or
@@ -147,7 +147,7 @@ bool PMICClass::enableCharge() {
 
 /*******************************************************************************
  * Function Name  : enableBoostMode
- * Description    : Enables PMIC boost mode, allow to generate 5V from battery
+ * Description    : Enables PMIC boost mode, allow to generate 5 V from battery
  * Input          : NONE
  * Return         : 0 on Error, 1 on Success
  *******************************************************************************/
@@ -278,10 +278,10 @@ bool PMICClass::setInputVoltageLimit(float voltage) {
         voltage = 3.88;
     }
 
-    // round(((desired voltage - base_voltage_offset) / minimum_votage_value) * LSB value)
+    // round(((desired voltage - base_voltage_offset) / minimum_voltage_value) * LSB value)
     // where:
     // - BASE_VOLTAGE_OFFSET = 3.88 V;
-    // - minimum_votage_value = 0.008 V (80 mV);
+    // - minimum_voltage_value = 0.008 V (80 mV);
     // - LSB value = 8;
     // after mask with & 0x78 to set only the input voltage bits
     return writeRegister(INPUT_SOURCE_REGISTER, (mask | (round((voltage - 3.88) * 100) & 0x78)));
@@ -543,7 +543,7 @@ bool PMICClass::resetWatchdog() {
 /*******************************************************************************
  * Function Name  : setMinimumSystemVoltage
  * Description    : Set the minimum acceptable voltage to feed the onboard
-                    mcu and module
+                    MCU and module
  * Input          : Minimum system voltage in Volt
  * Return         : 0 Error, 1 Success
 *******************************************************************************/
@@ -887,7 +887,7 @@ bool PMICClass::disableBATFET(void) {
  * Function Name  : enableChargeFaultINT
  * Description    : Enable interrupt during Charge fault
  * Input          : NONE
- * Return         : 0 on Error, 1 on Succes
+ * Return         : 0 on Error, 1 on Success
 *******************************************************************************/
 bool PMICClass::enableChargeFaultINT() {
     int  DATA = readRegister(MISC_CONTROL_REGISTER);
@@ -905,7 +905,7 @@ bool PMICClass::enableChargeFaultINT() {
  * Function Name  : disableChargeFaultINT
  * Description    : Disable interrupt during Charge fault
  * Input          : NONE
- * Return         : 0 on Error, 1 on Succes
+ * Return         : 0 on Error, 1 on Success
 *******************************************************************************/
 bool PMICClass::disableChargeFaultINT() {
     int  DATA = readRegister(MISC_CONTROL_REGISTER);
@@ -923,7 +923,7 @@ bool PMICClass::disableChargeFaultINT() {
  * Function Name  : enableBatFaultINT
  * Description    : Enable interrupt during battery fault
  * Input          : NONE
- * Return         : 0 on Error, 1 on Succes
+ * Return         : 0 on Error, 1 on Success
 *******************************************************************************/
 bool PMICClass::enableBatFaultINT(){
     int  DATA = readRegister(MISC_CONTROL_REGISTER);
@@ -941,7 +941,7 @@ bool PMICClass::enableBatFaultINT(){
  * Function Name  : disableBatFaultINT
  * Description    : Disable interrupt during battery fault
  * Input          : NONE
- * Return         : 0 on Error, 1 on Succes
+ * Return         : 0 on Error, 1 on Success
 *******************************************************************************/
 bool PMICClass::disableBatFaultINT() {
     int  DATA = readRegister(MISC_CONTROL_REGISTER);
@@ -1024,7 +1024,7 @@ bool PMICClass::isPowerGood(void) {
  * Function Name  : isHot
  * Description    : Check if is in Thermal Regulation
  * Input          : NONE
- * Return         : 0 on Nomral state, 1 on Thermal Regulation state
+ * Return         : 0 on Normal state, 1 on Thermal Regulation state
  *******************************************************************************/
 bool PMICClass::isHot(void) {
 
@@ -1087,7 +1087,7 @@ bool PMICClass::isBattConnected(void) {
 }
 
 /*******************************************************************************
- * Function Name  : readSystemStatusRegeister
+ * Function Name  : readSystemStatusRegister
  * Description    : Query the PMIC and returns the System Status Register value
  * Input          : NONE
  * Return         : -1 on Error, System Status Register byte on Success

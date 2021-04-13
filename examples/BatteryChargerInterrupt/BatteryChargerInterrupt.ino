@@ -1,11 +1,11 @@
 /*
-  Battery charge Interrupt Example
+  Battery Charge Interrupt Example
 
   This example shows how to configure and enable charge mode on Arduino MKR boards
 
   Circuit:
   - Arduino MKR board
-  - 750 mAh lipo battery
+  - 750 mAh LiPo battery
 
   created 21 Aug 2019
   by Riccardo Rizzo
@@ -15,7 +15,7 @@
 
 #include <Arduino_PMIC.h>
 
-volatile unsigned long time_last_interrurpt = millis();
+volatile unsigned long time_last_interrupt = millis();
 
 void setup() {
   Serial.begin(9600);
@@ -23,7 +23,7 @@ void setup() {
     ; // wait for serial port to connect. Needed for native USB port only
   }
 
-  // Attach the PMIC irq pin
+  // Attach the PMIC IRQ pin
   attachInterrupt(digitalPinToInterrupt(PMIC_IRQ_PIN), batteryConnected, FALLING);
 
   if (!PMIC.begin()) {
@@ -51,7 +51,7 @@ void setup() {
   }
 
   // Set the charge current to 375 mA
-  // the charge current should be definde as maximum at (C for hour)/2h
+  // the charge current should be defined as maximum at (C for hour)/2h
   // to avoid battery explosion (for example for a 750mAh battery set to 0.375 A)
   if (!PMIC.setChargeCurrent(0.375)) {
     Serial.println("Error in set charge current");
@@ -60,7 +60,7 @@ void setup() {
 }
 
 void loop() {
-  if (millis() - time_last_interrurpt > 100) {
+  if (millis() - time_last_interrupt > 100) {
     // Enable the Charger
     if (!PMIC.enableCharge()) {
       Serial.println("Error enabling Charge mode");
@@ -93,5 +93,5 @@ void loop() {
 }
 
 void batteryConnected() {
-  time_last_interrurpt = millis();
+  time_last_interrupt = millis();
 }

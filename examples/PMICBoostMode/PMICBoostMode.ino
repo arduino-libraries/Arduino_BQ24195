@@ -15,7 +15,7 @@
 
 #include <Arduino_PMIC.h>
 
-int usb_mode = UNKNOWM_MODE;
+int usb_mode = UNKNOWN_MODE;
 
 void setup()
 {

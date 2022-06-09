@@ -23,8 +23,11 @@ void setup() {
     ; // wait for serial port to connect. Needed for native USB port only
   }
 
+// Available only for MKRGSM1400 and MKRNB1500
+#if defined(ARDUINO_SAMD_MKRGSM1400) || defined(ARDUINO_SAMD_MKRNB1500)
   // Attach the PMIC IRQ pin
   attachInterrupt(digitalPinToInterrupt(PMIC_IRQ_PIN), batteryConnected, FALLING);
+#endif
 
   if (!PMIC.begin()) {
     Serial.println("Failed to initialize PMIC!");
@@ -72,12 +75,9 @@ void loop() {
 
       // loop until charge is done
       if (PMIC.chargeStatus() != CHARGE_TERMINATION_DONE) {
-        Serial.println("Charge mode");
-        Serial.println(PMIC.isCharging());
         delay(1000);
       } else {
         // Disable the charger
-
         Serial.println("Disable Charge mode");
         if (!PMIC.disableCharge()) {
           Serial.println("Error disabling Charge mode");
@@ -85,7 +85,6 @@ void loop() {
         // if you really want to detach the battery call
         // PMIC.disableBATFET();
         //isbatteryconnected = false;
-
       }
     }
   }

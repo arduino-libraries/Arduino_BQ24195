@@ -459,6 +459,15 @@ bool PMICClass::enableCharging() {
     DATA = DATA & 0b11001111;
     DATA = DATA | 0b00010000;
     return writeRegister(POWERON_CONFIG_REGISTER, DATA);
+
+    // enable Charging Safety Timer
+    DATA = readRegister(CHARGE_TIMER_CONTROL_REGISTER);
+
+    if (DATA == -1) {
+        return 0;
+    }
+
+    return writeRegister(CHARGE_TIMER_CONTROL_REGISTER, (DATA | 0b00001000));
 }
 
 /*******************************************************************************
@@ -475,7 +484,18 @@ bool PMICClass::disableCharging() {
         return 0;
     }
 
-    return writeRegister(POWERON_CONFIG_REGISTER, DATA & 0xCF);
+    if (writeRegister(POWERON_CONFIG_REGISTER, DATA & 0xCF)){
+        return 0;
+    }
+
+    // disable Charging Safety Timer
+    DATA = readRegister(CHARGE_TIMER_CONTROL_REGISTER);
+
+    if (DATA == -1) {
+        return 0;
+    }
+
+    return writeRegister(CHARGE_TIMER_CONTROL_REGISTER, (DATA & 0b11110110));
 }
 
 /*******************************************************************************
@@ -771,6 +791,46 @@ bool PMICClass::disableWatchdog(void) {
     }
 
     return writeRegister(CHARGE_TIMER_CONTROL_REGISTER, (DATA & 0b11001110));
+}
+
+/*******************************************************************************
+ * Function Name  : enableSafetyChargeTimer
+ * Description    : Enable Safety Charge timer
+ * Input          : NONE
+ * Return         : 0 on Error, 1 on Success
+ *******************************************************************************/
+bool PMICClass::enableSafetyChargeTimer(void) {
+
+    int DATA = readRegister(CHARGE_TIMER_CONTROL_REGISTER);
+
+    if (DATA == -1) {
+        return 0;
+    }
+
+    return writeRegister(CHARGE_TIMER_CONTROL_REGISTER, (DATA | 0b00001000));
+}
+
+
+/*******************************************************************************
+ * Function Name  : disableSafetyChargeTimer
+ * Description    : Disable Safety Charge timer
+ * Input          : NONE
+ * Return         : 0 on Error, 1 on Success
+ *******************************************************************************/
+bool PMICClass::disableSafetyChargeTimer(void) {
+    int DATA = readRegister(CHARGE_TIMER_CONTROL_REGISTER) & 0x30;
+
+    if ((DATA == 0x10) && (PMIC.chargeStatus() != CHARGE_TERMINATION_DONE)){
+        return 0;
+    }
+
+    DATA = readRegister(CHARGE_TIMER_CONTROL_REGISTER);
+
+    if (DATA == -1) {
+        return 0;
+    }
+
+    return writeRegister(CHARGE_TIMER_CONTROL_REGISTER, (DATA & 0b11110110));
 }
 
 /*******************************************************************************

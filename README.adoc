@@ -8,7 +8,7 @@ image:https://github.com/{repository-owner}/{repository-name}/actions/workflows/
 image:https://github.com/{repository-owner}/{repository-name}/actions/workflows/spell-check.yml/badge.svg["Spell Check status", link="https://github.com/{repository-owner}/{repository-name}/actions/workflows/spell-check.yml"]
 
 This library allows the control and configuration of the BQ24195 PMIC used on various Arduino boards including:
-- All MKR boards (apart from MKR 1000)
+- All MKR boards (apart from MKR 1000, Zero, WAN 1300 and Vidor 4000)
 - Nano Motor Carrier
 - Portenta Max Carrier
 

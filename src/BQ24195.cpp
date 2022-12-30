@@ -244,7 +244,7 @@ bool PMICClass::disableCharge() {
 *******************************************************************************/
 bool PMICClass::disableBoostMode() {
   int DATA = readRegister(POWERON_CONFIG_REGISTER);
-#ifdef ARDUINO_ARCH_SAMD
+#ifdef USE_ARDUINO_MKR_PIN_LAYOUT
     digitalWrite(PIN_USB_HOST_ENABLE, HIGH);
 #endif
 

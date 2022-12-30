@@ -1,5 +1,5 @@
 /*
-  This file is part of the Arduino_BQ24195 library.
+  This file is part of the Arduino_PMIC library.
   Copyright (c) 2019 Arduino SA. All rights reserved.
 
   This library is free software; you can redistribute it and/or
@@ -66,11 +66,11 @@ bool PMICClass::begin()
 {
     _wire->begin();
 
-#ifdef ARDUINO_ARCH_SAMD
+#ifdef USE_ARDUINO_MKR_PIN_LAYOUT
     pinMode(PIN_USB_HOST_ENABLE, OUTPUT);
     digitalWrite(PIN_USB_HOST_ENABLE, LOW);
     #if defined(ARDUINO_SAMD_MKRGSM1400) || defined(ARDUINO_SAMD_MKRNB1500)
-      pinMode(PMIC_IRQ_PIN, INPUT_PULLUP);
+    pinMode(PMIC_IRQ_PIN, INPUT_PULLUP);
     #endif
 #endif
 
@@ -90,10 +90,10 @@ bool PMICClass::begin()
  *******************************************************************************/
 void PMICClass::end()
 {
-#ifdef ARDUINO_ARCH_SAMD
+#ifdef USE_ARDUINO_MKR_PIN_LAYOUT
     pinMode(PIN_USB_HOST_ENABLE, INPUT);
     #if defined(ARDUINO_SAMD_MKRGSM1400) || defined(ARDUINO_SAMD_MKRNB1500)
-      pinMode(PMIC_IRQ_PIN, INPUT);
+    pinMode(PMIC_IRQ_PIN, INPUT);
     #endif
 #endif
     _wire->end();
@@ -106,7 +106,7 @@ void PMICClass::end()
  * Return         : 0 on Error, 1 on Success
  *******************************************************************************/
 bool PMICClass::enableCharge() {
-#ifdef ARDUINO_ARCH_SAMD
+#ifdef USE_ARDUINO_MKR_PIN_LAYOUT
     digitalWrite(PIN_USB_HOST_ENABLE, LOW);
 #endif
     int DATA = readRegister(POWERON_CONFIG_REGISTER);
@@ -162,9 +162,10 @@ bool PMICClass::enableBoostMode() {
     if (!writeRegister(POWERON_CONFIG_REGISTER, mask | 0x20)) {
         return 0;
     }
-#ifdef ARDUINO_ARCH_SAMD
+#ifdef USE_ARDUINO_MKR_PIN_LAYOUT
     digitalWrite(PIN_USB_HOST_ENABLE, LOW);
 #endif
+
     // Disable Charge Termination Pin
     DATA = readRegister(CHARGE_TIMER_CONTROL_REGISTER);
 

@@ -43,6 +43,9 @@ jobs:
           - fqbn: arduino:samd:mkrvidor4000
             platforms: |
               - name: arduino:samd
+          - fqbn: arduino:samd:nano_33_iot
+            platforms: |
+              - name: arduino:samd
           - fqbn: arduino:mbed_portenta:envie_m7
             platforms: |
               - name: arduino:mbed_portenta

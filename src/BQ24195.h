@@ -86,6 +86,8 @@ class PMICClass {
 
     // Charge Timer Control Register
     bool disableWatchdog(void);
+    bool enableSafetyChargeTimer(void);
+    bool disableSafetyChargeTimer(void);
 
     // Misc Operation Control Register
     bool enableDPDM(void);

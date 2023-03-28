@@ -87,7 +87,7 @@ class PMICClass {
     // Charge Timer Control Register
     bool disableWatchdog(void);
 		float getFastChargeTimerSetting();
-		bool setFastChargeTimerSetting(float hours);
+		bool setFastChargeTimerSetting(float const hours);
 
     // Misc Operation Control Register
     bool enableDPDM(void);

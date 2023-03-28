@@ -51,10 +51,21 @@ enum Current_Limit_mask {
 };
 
 enum Fast_Charge_Timer_Setting {
-  FAST_CHARGE_TIMER_05H = 0x00,
-  FAST_CHARGE_TIMER_08H,
-  FAST_CHARGE_TIMER_12H,
-  FAST_CHARGE_TIMER_20H
+  FAST_CHARGE_TIMER_05H = 0b000,
+  FAST_CHARGE_TIMER_08H = 0b010,
+  FAST_CHARGE_TIMER_12H = 0b100,
+  FAST_CHARGE_TIMER_20H = 0b110
+};
+
+enum Charge_Timer_Control_Register_Bits {
+	CHARGE_TIMER_CONTROL_REGISTER_RESERVED = 0,
+	CHARGE_TIMER_CONTROL_REGISTER_CHG_TIMER_0,
+	CHARGE_TIMER_CONTROL_REGISTER_CHG_TIMER_1,
+	CHARGE_TIMER_CONTROL_REGISTER_EN_TIMER,
+	CHARGE_TIMER_CONTROL_REGISTER_WATCHDOG_0,
+	CHARGE_TIMER_CONTROL_REGISTER_WATCHDOG_1,
+  CHARGE_TIMER_CONTROL_REGISTER_TERM_STAT,
+  CHARGE_TIMER_CONTROL_REGISTER_EN_TERM
 };
 
 PMICClass::PMICClass(TwoWire  & wire) :
@@ -1209,15 +1220,21 @@ bool PMICClass::isBatteryInOverVoltage() {
  * Input          : safety timer duration in hours (rounds up)
  * Return         : 0 on Error, 1 on Success
  *******************************************************************************/
-bool PMICClass::setFastChargeTimerSetting(float hours) {
+bool PMICClass::setFastChargeTimerSetting(float const hours) {
 
-    int DATA = readRegister(CHARGE_TIMER_CONTROL_REGISTER);
+    int const DATA = readRegister(CHARGE_TIMER_CONTROL_REGISTER);
 
     if (DATA == -1) {
         return 0;
     }
 
-    byte mask = DATA & 0b11111001;
+		// first disable timer
+		if (!writeRegister(CHARGE_TIMER_CONTROL_REGISTER, DATA & ~((1<<CHARGE_TIMER_CONTROL_REGISTER_EN_TIMER)))) {
+        return 0;
+		}
+
+    // mask out previous fast charge timer value and ensure timer is enabled afterwards
+    byte mask = DATA & ~((1<<CHARGE_TIMER_CONTROL_REGISTER_CHG_TIMER_0) | (1<<CHARGE_TIMER_CONTROL_REGISTER_CHG_TIMER_1)) | (1<<CHARGE_TIMER_CONTROL_REGISTER_EN_TIMER);
     byte timer_val;
 
     if (hours > 12) {
@@ -1229,7 +1246,6 @@ bool PMICClass::setFastChargeTimerSetting(float hours) {
 		} else {
         timer_val = FAST_CHARGE_TIMER_05H;
 		}
-		timer_val = timer_val << 1;
 
     return writeRegister(CHARGE_TIMER_CONTROL_REGISTER, (mask | timer_val));
 }
@@ -1241,13 +1257,13 @@ bool PMICClass::setFastChargeTimerSetting(float hours) {
  * Return         : NAN on Error, fast charge timer limit value on Success
  *******************************************************************************/
 float PMICClass::getFastChargeTimerSetting(void) {
-    int DATA = readRegister(CHARGE_TIMER_CONTROL_REGISTER);
+    int const DATA = readRegister(CHARGE_TIMER_CONTROL_REGISTER);
 
     if (DATA == -1) {
         return NAN;
     }
 
-    byte mask = (DATA & 0b00000110) >> 1;
+    byte mask = DATA & ((1<<CHARGE_TIMER_CONTROL_REGISTER_CHG_TIMER_0) | (1<<CHARGE_TIMER_CONTROL_REGISTER_CHG_TIMER_1));
 
     switch (mask) {
         case FAST_CHARGE_TIMER_05H:

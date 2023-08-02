@@ -347,7 +347,7 @@ bool PMICClass::setInputCurrentLimit(float current) {
     if (current >= 0.5) {
         current_val = CURRENT_LIM_500;
     }
-    if (current >= CURRENT_LIM_900) {
+    if (current >= 0.9) {
         current_val = CURRENT_LIM_900;
     }
     if (current >= 1.2) {
@@ -1190,7 +1190,7 @@ bool PMICClass::isWatchdogExpired() {
 
     if((DATA & 0x80)) {
         return 1;
-    } 
+    }
     return 0;
 }
 
@@ -1209,7 +1209,7 @@ bool PMICClass::isBatteryInOverVoltage() {
 
     if((DATA & 0x08)) {
         return 1;
-    } 
+    }
     return 0;
 }
 

@@ -34,30 +34,39 @@ jobs:
           - fqbn: arduino:samd:mkrwifi1010
             platforms: |
               - name: arduino:samd
+            artifact-name-suffix: arduino-samd-mkrwifi1010
           - fqbn: arduino:samd:mkrgsm1400
             platforms: |
               - name: arduino:samd
+            artifact-name-suffix: arduino-samd-mkrgsm1400
           - fqbn: arduino:samd:mkrnb1500
             platforms: |
               - name: arduino:samd
+            artifact-name-suffix: arduino-samd-mkrnb1500
           - fqbn: arduino:samd:mkrvidor4000
             platforms: |
               - name: arduino:samd
+            artifact-name-suffix: arduino-samd-mkrvidor4000
           - fqbn: arduino:samd:nano_33_iot
             platforms: |
               - name: arduino:samd
+            artifact-name-suffix: arduino-samd-nano_33_iot
           - fqbn: arduino:mbed_portenta:envie_m7
             platforms: |
               - name: arduino:mbed_portenta
+            artifact-name-suffix: arduino-mbed_portenta-envie_m7
           - fqbn: arduino:mbed_portenta:envie_m7:target_core=cm4
             platforms: |
               - name: arduino:mbed_portenta
+            artifact-name-suffix: arduino-mbed_portenta-envie_m7-target_core-cm4
           - fqbn: arduino:mbed_nano:nano33ble
             platforms: |
               - name: arduino:mbed_nano
+            artifact-name-suffix: arduino-mbed_nano-nano33ble
           - fqbn: arduino:mbed_nano:nanorp2040connect
             platforms: |
               - name: arduino:mbed_nano
+            artifact-name-suffix: arduino-mbed_nano-nanorp2040connect
 
     steps:
       - name: Checkout repository
@@ -84,4 +93,4 @@ jobs:
         with:
           if-no-files-found: error
           path: ${{ env.SKETCHES_REPORTS_PATH }}
-          name: ${{ env.SKETCHES_REPORTS_PATH }}
+          name: sketches-report-${{ matrix.board.artifact-name-suffix }}

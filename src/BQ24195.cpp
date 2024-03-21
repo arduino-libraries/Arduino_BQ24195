@@ -331,7 +331,6 @@ float PMICClass::getInputVoltageLimit(void) {
  * Return         : 0 on Error, 1 on Success
  *******************************************************************************/
 bool PMICClass::setInputCurrentLimit(float current) {
-
     int DATA = readRegister(INPUT_SOURCE_REGISTER);
 
     if (DATA == -1) {
@@ -341,25 +340,25 @@ bool PMICClass::setInputCurrentLimit(float current) {
     byte mask = DATA & 0xF8;
     byte current_val = CURRENT_LIM_100;
 
-    if (current > 0.015) {
+    if (current > 0.015f) {
         current_val = CURRENT_LIM_150;
     }
-    if (current >= 0.5) {
+    if (current >= 0.500f) {
         current_val = CURRENT_LIM_500;
     }
-    if (current >= CURRENT_LIM_900) {
+    if (current >= 0.900f) {
         current_val = CURRENT_LIM_900;
     }
-    if (current >= 1.2) {
+    if (current >= 1.200f) {
         current_val = CURRENT_LIM_1200;
     }
-    if (current >= 1.5) {
+    if (current >= 1.500f) {
         current_val = CURRENT_LIM_1500;
     }
-    if (current >= 2.0) {
+    if (current >= 2.000f) {
         current_val = CURRENT_LIM_2000;
     }
-    if (current >= 3.0) {
+    if (current >= 3.000f) {
         current_val = CURRENT_LIM_3000;
     }
     return writeRegister(INPUT_SOURCE_REGISTER, (mask | current_val));

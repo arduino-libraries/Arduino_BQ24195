@@ -290,7 +290,7 @@ bool PMICClass::setInputVoltageLimit(float voltage) {
         return 0;
     }
 
-    byte mask = DATA & 0x87;
+    byte mask = DATA & 0x78;
     if (voltage > 5.08) {
         voltage = 5.08;
     } else if (voltage < 3.88) {

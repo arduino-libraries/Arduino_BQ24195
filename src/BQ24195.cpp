@@ -347,7 +347,7 @@ bool PMICClass::setInputCurrentLimit(float current) {
     if (current >= 0.5) {
         current_val = CURRENT_LIM_500;
     }
-    if (current >= CURRENT_LIM_900) {
+    if (current >= 0.9) {
         current_val = CURRENT_LIM_900;
     }
     if (current >= 1.2) {

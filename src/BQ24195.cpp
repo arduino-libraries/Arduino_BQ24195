@@ -789,7 +789,7 @@ bool PMICClass::disableWatchdog(void) {
         return 0;
     }
 
-    return writeRegister(CHARGE_TIMER_CONTROL_REGISTER, (DATA & 0b11001110));
+    return writeRegister(CHARGE_TIMER_CONTROL_REGISTER, (DATA & 0b11000110));
 }
 
 /*******************************************************************************

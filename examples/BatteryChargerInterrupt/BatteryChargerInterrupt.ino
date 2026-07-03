@@ -69,9 +69,9 @@ void loop() {
       Serial.println("Error enabling Charge mode");
     }
 
-    // canRunOnBattery() returns true if the battery voltage is < the minimum
+    // canRunOnBattery() returns true if the battery voltage is > the minimum
     // systems voltage
-    if (PMIC.canRunOnBattery()) {
+    if (!PMIC.canRunOnBattery()) {
 
       // loop until charge is done
       if (PMIC.chargeStatus() != CHARGE_TERMINATION_DONE) {

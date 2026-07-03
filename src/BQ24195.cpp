@@ -1062,11 +1062,13 @@ bool PMICClass::isHot(void) {
 }
 
 /*******************************************************************************
- * Function Name  : getVsysStat
+ * Function Name  : canRunOnBattery
  * Description    : Check if the battery voltage is lower than the input
-                    system voltage limit
+                    system voltage limit. Does not check other conditions, e.g.
+                    if battery is connected
+                    Notice the inversion of the register flag
  * Input          : NONE
- * Return         : 0 if V_BAT > V_SYS_MIN, 1 if V_BAT < V_SYS_MIN
+ * Return         : true if V_BAT > V_SYS_MIN, false if V_BAT < V_SYS_MIN
  *******************************************************************************/
 bool PMICClass::canRunOnBattery() {
 
@@ -1074,13 +1076,16 @@ bool PMICClass::canRunOnBattery() {
     DATA = readRegister(SYSTEM_STATUS_REGISTER);
 
     if (DATA == -1) {
+        // Pessimistically assume an issue with battery too
         return 0;
     }
 
-    if(DATA & 0x01) {
-        return 1;
+    if (DATA & 0x01) {
+        // PMIC is in VSYSMIN regulation, which means the voltage is too low
+        return 0;
     }
-    return 0;
+
+    return 1;
 }
 
 /*******************************************************************************
